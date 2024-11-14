@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">新規メモ</h5>
+                <form action="{{ url_for('create_memo') }}" method="POST">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" name="title" placeholder="タイトル" required>
+                    </div>
+                    <div class="mb-3">
+                        <textarea class="form-control" name="content" rows="3" placeholder="内容" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% for memo in memos %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ memo.title }}</h5>
+                <p class="card-text">{{ memo.content }}</p>
+                <p class="card-text">
+                    <small class="text-muted">
+                        更新日時: {{ memo.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                </p>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('edit_memo', id=memo.id) }}" class="btn btn-secondary btn-sm">編集</a>
+                <form action="{{ url_for('delete_memo', id=memo.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('本当に削除しますか？')">削除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
